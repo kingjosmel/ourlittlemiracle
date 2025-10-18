@@ -6,12 +6,7 @@
     <title>Countdown to Our Baby</title>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Comic Neue', cursive;
             min-height: 100vh;
@@ -24,14 +19,11 @@
             justify-content: center;
             padding: 40px 20px;
         }
-
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-image: 
                 radial-gradient(circle, #ff6b9d 8px, transparent 8px),
                 radial-gradient(circle, #ff6b9d 8px, transparent 8px);
@@ -41,15 +33,7 @@
             z-index: 0;
             pointer-events: none;
         }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            max-width: 800px;
-            width: 100%;
-        }
-
+        .container { position: relative; z-index: 1; text-align: center; max-width: 800px; width: 100%; }
         h1 {
             font-size: 3em;
             color: #ff6b9d;
@@ -57,80 +41,33 @@
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
         }
-
-        .subtext {
-            font-size: 1.3em;
-            color: #6b5b95;
-            margin-bottom: 25px;
-            line-height: 1.6;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
-        }
-
-        .subtext.special {
-            font-style: italic;
-            color: #8a6b9d;
-        }
-
-        .countdown-section {
-            margin: 50px 0;
-        }
-
-        .section-title {
-            font-size: 2em;
-            color: #ff6b9d;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
-        }
-
-        .countdown-value {
-            font-size: 2.5em;
-            color: #6b5b95;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
-        }
-
-        .live-countdown {
-            font-size: 2em;
-            color: #6b5b95;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4);
-        }
-
+        .subtext { font-size: 1.3em; color: #6b5b95; margin-bottom: 25px; line-height: 1.6; text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3); }
+        .subtext.special { font-style: italic; color: #8a6b9d; }
+        .countdown-section { margin: 50px 0; }
+        .section-title { font-size: 2em; color: #ff6b9d; margin-bottom: 15px; font-weight: 700; text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5); }
+        .countdown-value { font-size: 2.5em; color: #6b5b95; font-weight: 700; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4); }
+        .live-countdown { font-size: 2em; color: #6b5b95; font-weight: 700; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.4); }
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            .subtext {
-                font-size: 1.1em;
-            }
-
-            .section-title {
-                font-size: 1.5em;
-            }
-
-            .countdown-value {
-                font-size: 2em;
-            }
-
-            .live-countdown {
-                font-size: 1.5em;
-            }
+            h1 { font-size: 2em; }
+            .subtext { font-size: 1.1em; }
+            .section-title { font-size: 1.5em; }
+            .countdown-value { font-size: 2em; }
+            .live-countdown { font-size: 1.5em; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Countdown to the day our baby arrives</h1>
-        
         <p class="subtext">With you, IHOTU ("my love"), every day feels closer to a miracle.</p>
-        
-        <p class="subtext special">I can't wait to see you become a mother we're counting down together until we meet our little one. You've already given this baby love before she's even here, and I'm grateful to be on this journey with you. Every kick, every craving, every moment brings us closer to the day we hold our child in our arms.</p>
+        <p class="subtext special">
+            I can't wait to see you become a mother — we're counting down together until we meet our little one.
+            You've already given this baby love before she's even here, and I'm grateful to be on this journey with you.
+        </p>
 
         <div class="countdown-section">
             <div class="section-title">Time Passed</div>
-            <div class="countdown-value">3 months, 2 days</div>
+            <div class="countdown-value" id="timePassed">Calculating...</div>
         </div>
 
         <div class="countdown-section">
@@ -145,61 +82,72 @@
     </div>
 
     <script>
-        // Start date (reference point - 3 months, 2 days ago from today)
-        const START_DATE = new Date();
-        START_DATE.setMonth(START_DATE.getMonth() - 3);
-        START_DATE.setDate(START_DATE.getDate() - 2);
-        START_DATE.setHours(0, 0, 0, 0);
+        // Fixed pregnancy start date: 15 July 2025
+        const START_DATE = new Date("2025-07-15T00:00:00");
 
-        // Total pregnancy duration in days (approximately 9 months = 280 days)
+        // Total pregnancy duration (approx. 280 days / 9 months)
         const TOTAL_DAYS = 280;
-        
-        // Calculate end date
         const END_DATE = new Date(START_DATE);
         END_DATE.setDate(END_DATE.getDate() + TOTAL_DAYS);
 
-        function calculateTimeRemaining() {
+        // Calculate calendar-based difference in months & days
+        function calculateCalendarDifference(from, to) {
+            let years = to.getFullYear() - from.getFullYear();
+            let months = to.getMonth() - from.getMonth() + years * 12;
+            let days = to.getDate() - from.getDate();
+
+            if (days < 0) {
+                months -= 1;
+                const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+                days += prevMonth;
+            }
+
+            return { months, days };
+        }
+
+        function updateTimePassed() {
             const now = new Date();
-            now.setHours(0, 0, 0, 0);
-            
-            const diffTime = END_DATE - now;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            const months = Math.floor(diffDays / 30);
-            const days = diffDays % 30;
-            
-            return `${months} months, ${days} days`;
+            const diff = calculateCalendarDifference(START_DATE, now);
+            document.getElementById("timePassed").textContent = `${diff.months} months, ${diff.days} days`;
+        }
+
+        function updateTimeRemaining() {
+            const now = new Date();
+            let diff = calculateCalendarDifference(now, END_DATE);
+            if (diff.months < 0 || diff.days < 0) diff = { months: 0, days: 0 };
+            document.getElementById("timeRemaining").textContent = `${diff.months} months, ${diff.days} days`;
         }
 
         function updateLiveCountdown() {
             const now = new Date();
             const midnight = new Date();
             midnight.setHours(24, 0, 0, 0);
-            
             const diff = midnight - now;
-            
+
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            document.getElementById('liveCountdown').textContent = 
-                `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+
+            document.getElementById('liveCountdown').textContent =
+                `${hours}h ${minutes}m ${seconds}s`;
         }
 
-        // Update time remaining once when page loads
-        document.getElementById('timeRemaining').textContent = calculateTimeRemaining();
+        // Initial load
+        updateTimePassed();
+        updateTimeRemaining();
+        updateLiveCountdown();
 
-        // Update time remaining daily at midnight
+        // Update every second
+        setInterval(updateLiveCountdown, 1000);
+
+        // Update pregnancy counters at midnight
         setInterval(() => {
             const now = new Date();
-            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
-                document.getElementById('timeRemaining').textContent = calculateTimeRemaining();
+            if (now.getHours() === 0 && now.getMinutes() === 0) {
+                updateTimePassed();
+                updateTimeRemaining();
             }
-        }, 1000);
-
-        // Update live countdown every second
-        updateLiveCountdown();
-        setInterval(updateLiveCountdown, 1000);
+        }, 60000);
     </script>
 </body>
 </html>
